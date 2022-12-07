@@ -7,11 +7,13 @@ class BuildLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: "logo",
-      child: SizedBox(
-        height: 200.0,
-        child: Image.asset('assets/images/logo.png'),
+    return Flexible(
+      child: Hero(
+        tag: "logo",
+        child: SizedBox(
+          height: 200.0,
+          child: Image.asset('assets/images/logo.png'),
+        ),
       ),
     );
   }

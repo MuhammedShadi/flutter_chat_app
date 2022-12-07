@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 
 final _fireStore = FirebaseFirestore.instance;
+
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
@@ -61,9 +62,8 @@ class _ChatScreenState extends State<ChatScreen> {
               icon: const Icon(Icons.close),
               onPressed: () {
                 //Implement logout functionality
-                messageStream();
-                // _auth.signOut();
-                // Navigator.pop(context);
+                _auth.signOut();
+                Navigator.pop(context);
               }),
         ],
         title: const Text('⚡️Chat'),
@@ -116,18 +116,20 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-
 class MessageStream extends StatelessWidget {
   const MessageStream({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return  StreamBuilder(
+    return StreamBuilder(
       stream: _fireStore.collection("messages").snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return CircularProgressIndicator(
-            color: Colors.amberAccent,
+          return Center(
+            child: CircularProgressIndicator(
+              color: Colors.amberAccent,
+              value: 10,
+            ),
           );
         } else {
           final messages = snapshot.data!.docs;
@@ -136,13 +138,12 @@ class MessageStream extends StatelessWidget {
             final messageText = message.data()["test"];
             final messageSender = message.data()["sender"];
             final messageBubble =
-            MessageBubble(text: messageText, sender: messageSender);
+                MessageBubble(text: messageText, sender: messageSender);
             messagesBubbles.add(messageBubble);
           }
           return Expanded(
             child: ListView(
-              padding: EdgeInsets.symmetric(
-                  horizontal: 20.0, vertical: 20.0),
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
               children: messagesBubbles,
             ),
           );
@@ -151,7 +152,6 @@ class MessageStream extends StatelessWidget {
     );
   }
 }
-
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({Key? key, required this.sender, required this.text})
@@ -171,7 +171,11 @@ class MessageBubble extends StatelessWidget {
             style: TextStyle(color: Colors.black54, fontSize: 10.0),
           ),
           Material(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
             elevation: 5,
             color: Colors.lightBlueAccent,
             child: Padding(
