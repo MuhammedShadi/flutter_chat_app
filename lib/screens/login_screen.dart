@@ -1,6 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/screens/componenets/rounded_button.dart';
+
+import 'componenets/build_logo.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,13 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Hero(
-              tag: "logo",
-              child: SizedBox(
-                height: 200.0,
-                child: Image.asset('assets/images/logo.png'),
-              ),
-            ),
+            const BuildLogo(),
             const SizedBox(
               height: 48.0,
             ),
@@ -82,24 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 24.0,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.lightBlueAccent,
-                borderRadius: const BorderRadius.all(Radius.circular(30.0)),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    //Implement login functionality.
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: const Text(
-                    'Log In',
-                  ),
-                ),
-              ),
-            ),
+            RoundedButton(color: Colors.lightBlueAccent, title:  'Log In', onPressed: (){}),
           ],
         ),
       ),
