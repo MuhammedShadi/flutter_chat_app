@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "754998817633",
+    "project_id": "mochat-1b6f0",
+    "storage_bucket": "mochat-1b6f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754998817633:android:ee2fded27b66123f4b8b20",
+        "android_client_info": {
+          "package_name": "com.mshadi.flutter_chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754998817633-83gukjatuajb4ug45sa0jo9muru8qgn9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG9EfVTQ_hAiOwXxogC9O0Tdumv-AHX-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754998817633-83gukjatuajb4ug45sa0jo9muru8qgn9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
