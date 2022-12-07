@@ -1,16 +1,34 @@
 // ignore_for_file: library_private_types_in_public_api, prefer_const_constructors
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../constants.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
-  static String id =  "chat_screen";
+
+  static String id = "chat_screen";
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final _auth = FirebaseAuth.instance;
+  void getUser() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      print(user.email);
+      print(user.displayName);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUser();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
