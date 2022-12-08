@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors
+// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, must_be_immutable
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,6 +19,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   String? messageText;
+  Timestamp? messageTime;
   final messageController = TextEditingController();
 
   void getUser() async {
@@ -95,9 +96,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   ElevatedButton(
                     onPressed: () {
                       //Implement send functionality.
+                      messageTime = Timestamp.now();
                       _fireStore.collection("messages").add({
-                        "test": messageText,
+                        "text": messageText,
                         "sender": _auth.currentUser!.email,
+                        "time": messageTime,
                       });
                       messageController.clear();
                     },
@@ -122,7 +125,7 @@ class MessageStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: _fireStore.collection("messages").snapshots(),
+      stream: _fireStore.collection("messages").orderBy('time', descending: true).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -132,11 +135,12 @@ class MessageStream extends StatelessWidget {
             ),
           );
         } else {
-          final messages = snapshot.data!.docs.reversed;
+          final messages = snapshot.data!.docs;
           List<MessageBubble> messagesBubbles = [];
           for (var message in messages) {
-            final messageText = message.data()["test"];
+            final messageText = message.data()["text"];
             final messageSender = message.data()["sender"];
+            final Timestamp?  messageTime = message.data()["time"];
             final currentUser = _auth.currentUser!.email;
 
             if (currentUser == messageSender) {}
@@ -144,6 +148,7 @@ class MessageStream extends StatelessWidget {
               text: messageText,
               sender: messageSender,
               isMe: currentUser == messageSender,
+              time: messageTime,
             );
             messagesBubbles.add(messageBubble);
           }
@@ -162,10 +167,11 @@ class MessageStream extends StatelessWidget {
 
 class MessageBubble extends StatelessWidget {
   MessageBubble(
-      {Key? key, required this.sender, required this.text, required this.isMe})
+      {Key? key, required this.sender, required this.text, required this.isMe,required this.time})
       : super(key: key);
   final String? sender;
   final String? text;
+  final Timestamp? time;
   bool? isMe;
 
   @override
@@ -184,21 +190,28 @@ class MessageBubble extends StatelessWidget {
             borderRadius:isMe! ?  BorderRadius.only(
               topLeft: Radius.circular(20),
               bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
+              topRight: Radius.circular(20),
             ): BorderRadius.only(
               topRight: Radius.circular(20),
-              bottomLeft: Radius.circular(20),
+              topLeft: Radius.circular(20),
               bottomRight: Radius.circular(20),
             ),
             elevation: 5,
             color: isMe! ? Colors.lightBlueAccent : Colors.white,
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 25),
               child: Text(
                 '$text',
                 style: TextStyle(color: isMe! ? Colors.white:Colors.black54, fontSize: 15.0),
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              "${time?.toDate().day}-${time?.toDate().month}-${time?.toDate().year}  ${time?.toDate().hour}:${time?.toDate().minute}",
+              style: TextStyle(color: Colors.black54, fontSize: 10.0),
             ),
           ),
         ],
