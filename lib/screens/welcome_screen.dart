@@ -67,7 +67,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Padding(
-              padding:  EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.2),
+              padding:  EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
               child: Row(
                 children: <Widget>[
                   Flexible(
